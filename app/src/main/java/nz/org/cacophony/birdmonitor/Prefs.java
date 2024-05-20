@@ -533,7 +533,7 @@ public class Prefs {
     }
 
     public boolean getHasRootAccess() {
-        return CommonUtils.isRooted(this.context);
+        return CommonUtils.isRooted();
     }
 
     public boolean getUseShortRecordings() {

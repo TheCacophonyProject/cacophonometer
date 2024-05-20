@@ -11,7 +11,7 @@ env:
 language: android
 dist: trusty
 jdk:
-  - openjdk11
+  - openjdk17
 android:
   components:
     - tools

@@ -63,6 +63,7 @@ class FrequencyFragment : Fragment() {
         return view
     }
 
+    @Deprecated("Deprecated in Java")
     override fun setUserVisibleHint(visible: Boolean) {
         super.setUserVisibleHint(visible)
         if (activity == null) {

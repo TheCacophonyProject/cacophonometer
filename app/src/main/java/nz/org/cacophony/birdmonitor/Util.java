@@ -79,10 +79,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import ch.qos.logback.classic.android.BasicLogcatConfigurator;
-import kotlin.random.Random;
 import kotlin.random.RandomKt;
 import kotlin.ranges.IntRange;
 import nz.org.cacophony.birdmonitor.views.MainActivity;
@@ -950,38 +950,50 @@ public class Util {
         } else {
             wakeUpTime = System.currentTimeMillis();
             if (prefs.getUseVeryFrequentRecordings()) {
-                return new Alarm(wakeUpTime + 1000 * (long) prefs.getTimeBetweenVeryFrequentRecordingsSeconds(),
-                        Prefs.NORMAL_URI);
+                return new Alarm(wakeUpTime + 1000 * (long) prefs.getTimeBetweenVeryFrequentRecordingsSeconds(), Prefs.NORMAL_URI);
             }
             if (prefs.getRandomSeed() > 9999) {
-                int seed = Random.Default.nextInt(9999);
+                int seed = new Random().nextInt(9999);
                 prefs.setRandomSeed(seed);
             }
-            String seed = String.valueOf(prefs.getRandomSeed());
 
+            String seed = String.valueOf(prefs.getRandomSeed());
             long currentDayInMillis = wakeUpTime / (1000 * 60 * 60 * 24) * (1000 * 60 * 60 * 24);
+
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 seed += LocalDate.now().getDayOfMonth();
-                seed += LocalDate.now().getMonth().getValue();
+                seed += LocalDate.now().getMonthValue();
             } else {
-                seed += (int) (currentDayInMillis);
+                seed += currentDayInMillis;
             }
-            Integer randomSeed = Integer.valueOf(seed);
-            Random chance = RandomKt.Random(randomSeed);
-            while (currentDayInMillis < wakeUpTime) {
-                float toWakeUp = chance.nextFloat();
-                float randomTime = chance.nextFloat();
-                float inXMinutes = (toWakeUp < prefs.getshortRecordingWindowChance())
-                        ? (prefs.getShortRecordingPause() + randomTime * prefs.getShortRecordingWindowMinutes())
-                        : (prefs.getLongRecordingPause() + randomTime * prefs.getLongRecordingWindowMinutes());
-                currentDayInMillis += (long) (1000 * 60 * inXMinutes);
+
+            // Ensure seed is within 32-bit integer bounds
+            try {
+                long seedLong = Long.parseLong(seed);
+                seedLong = Math.max(Integer.MIN_VALUE, Math.min(seedLong, Integer.MAX_VALUE));
+                int randomSeed = (int) seedLong;
+                prefs.setRandomSeed(randomSeed);
+
+                Random chance = new Random(randomSeed);
+                while (currentDayInMillis < wakeUpTime) {
+                    float toWakeUp = chance.nextFloat();
+                    float randomTime = chance.nextFloat();
+                    float inXMinutes = (toWakeUp < prefs.getshortRecordingWindowChance())
+                            ? (prefs.getShortRecordingPause() + randomTime * prefs.getShortRecordingWindowMinutes())
+                            : (prefs.getLongRecordingPause() + randomTime * prefs.getLongRecordingWindowMinutes());
+                    currentDayInMillis += (long) (1000 * 60 * inXMinutes);
+                }
+                wakeUpTime = currentDayInMillis;
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Error parsing seed to long: " + e.getMessage());
+                wakeUpTime = System.currentTimeMillis() + 1000 * 60 * 5; // fallback to a 5-minute delay
             }
-            wakeUpTime = currentDayInMillis;
         }
         // log the time of the next alarm
         Log.i(TAG, "Next alarm is at " + new Date(wakeUpTime));
         return new Alarm(wakeUpTime, Prefs.NORMAL_URI);
     }
+
 
     public static Intent getRepeatingAlarmIntent(Context context, String relativeTo) {
         Intent intent = new Intent(context, StartRecordingReceiver.class);
@@ -995,7 +1007,7 @@ public class Util {
 
     public static boolean alarmExists(Context context) {
         return PendingIntent.getBroadcast(context, 0, getRepeatingAlarmIntent(context, null),
-                PendingIntent.FLAG_NO_CREATE) != null;
+                PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE) != null;
     }
 
     /**
@@ -1396,7 +1408,7 @@ public class Util {
     public static boolean haveAllPermissions(Context context, String[] permissions) {
 
         // String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        // Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION};
+        // Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION}
 
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context,

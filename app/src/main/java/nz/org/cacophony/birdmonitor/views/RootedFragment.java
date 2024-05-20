@@ -51,7 +51,7 @@ public class RootedFragment extends Fragment {
 
     void checkRootAccess() {
         Prefs prefs = new Prefs(this.getContext());
-        boolean rooted = CommonUtils.isRooted(this.getContext());
+        boolean rooted = CommonUtils.isRooted();
 
         tvRooted.setText(getString(R.string.not_rooted));
         btnRootCheck.setVisibility(View.VISIBLE);

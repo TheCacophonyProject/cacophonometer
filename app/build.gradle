@@ -5,16 +5,16 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 // Increased to 15 ie Android 4.03 Icecream sandwich  to allow debugging with instant run https://developer.android.com/studio/run/
 // Increated to 16 for firebase
-ext.minimumSdkVersion = 19
+ext.minimumSdkVersion = 21
 ext.versionMajor = 1
-ext.versionMinor = 10
+ext.versionMinor = 11
 ext.versionPatch = 0
 ext.versionClassifier = null
 ext.isSnapshot = false
 
 repositories {
     //  mavenCentral()
-    jcenter()
+    mavenCentral()
 }
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -25,7 +25,7 @@ if (performSigning) {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdk 34
     if (performSigning) {
         signingConfigs {
             config {
@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "nz.org.cacophony.birdmonitor"
         minSdkVersion project.ext.minimumSdkVersion
-        targetSdkVersion 32
+        targetSdk 34
         versionCode generateVersionCode()
         versionName generateVersionName()
         vectorDrawables.useSupportLibrary = true
@@ -68,12 +68,17 @@ android {
     productFlavors {
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     testOptions {
         animationsDisabled = true
     }
+    buildFeatures {
+        aidl true
+        buildConfig = true
+    }
+    namespace 'nz.org.cacophony.birdmonitor'
 }
 
 private Integer generateVersionCode() {
@@ -94,24 +99,25 @@ private String generateVersionName() {
 
 dependencies {
 
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
-    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.google.firebase:firebase-analytics:22.0.0'
+    implementation 'org.conscrypt:conscrypt-android:2.5.1'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'com.github.tony19:logback-android:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     //    implementation 'com.android.support:appcompat-v7:25.3.1'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.loopj.android:android-async-http:1.4.11'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.4.0'
     // https://stackoverflow.com/questions/26633349/disable-ssl-as-a-protocol-in-httpsurlconnection
     implementation 'info.guardianproject.netcipher:netcipher:1.2'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.squareup.okio:okio:3.2.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.4.0'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.8.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     // Optional -- Hamcrest library
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
     // Optional -- UI testing with Espresso
@@ -125,13 +131,13 @@ dependencies {
     //  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:4.6.1'
-    implementation 'androidx.navigation:navigation-fragment:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment:2.7.7'
 
-    implementation 'com.google.firebase:firebase-core:21.1.0'
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-analytics:22.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.0.0'
+    implementation 'com.google.firebase:firebase-analytics:22.0.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
