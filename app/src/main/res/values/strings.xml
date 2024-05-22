@@ -200,7 +200,7 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
-    <string name="fragment_create_account_intro_text">Create a Cacophony account (or swipe to skip this step if you already have an account).</string>
+    <string name="fragment_create_account_intro_text">Swipe if you have an existing account.</string>
 
     <string name="Yes">Yes</string>
     <string name="No">No</string>
@@ -231,6 +231,7 @@
     <string name="noon_offset">Noon Offset (Mins)</string>
     <string name="update_alarms">Update Alarms</string>
     <string name="sun_alarms_updated">Sun Alarms Updated</string>
+    <string name="i_accept_the_end_user_agreement_terms">I accept the end user agreement terms</string>
 
 
 </resources>

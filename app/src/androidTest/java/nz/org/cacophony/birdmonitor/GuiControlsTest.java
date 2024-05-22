@@ -236,23 +236,23 @@ public class GuiControlsTest extends TestBaseStartingOnMainScreen {
         onView(withId(R.id.btnAdvanced)).perform(click());
         HelperCode.nowNavigateRightTimes(5);
 
-        onView(withId(R.id.swRooted)).check(matches(isNotChecked())); // warning sound should be off
+        onView(withId(R.id.swDisable)).check(matches(isNotChecked())); // warning sound should be off
 
         // Now turn on
-        onView(withId(R.id.swRooted)).perform(click());  // to enable play warning sound
-        onView(withId(R.id.swRooted)).check(matches(isChecked())); // confirm it is checked
+        onView(withId(R.id.swDisable)).perform(click());  // to enable play warning sound
+        onView(withId(R.id.swDisable)).check(matches(isChecked())); // confirm it is checked
         boolean isRooted = prefs.getHasRootAccess();
         assertTrue(isRooted);
         nowNavigateLeft(); // leave page
         nowNavigateRight();  // return to page
         // confirm that prefs and page are still correct
-        onView(withId(R.id.swRooted)).check(matches(isChecked()));
+        onView(withId(R.id.swDisable)).check(matches(isChecked()));
         isRooted = prefs.getHasRootAccess();
         assertTrue(isRooted);
 
         // Turn off
-        onView(withId(R.id.swRooted)).perform(click()); // turn off
-        onView(withId(R.id.swRooted)).check(matches(isNotChecked())); //  should be off
+        onView(withId(R.id.swDisable)).perform(click()); // turn off
+        onView(withId(R.id.swDisable)).check(matches(isNotChecked())); //  should be off
         isRooted = prefs.getHasRootAccess();
         assertFalse(isRooted);
     }

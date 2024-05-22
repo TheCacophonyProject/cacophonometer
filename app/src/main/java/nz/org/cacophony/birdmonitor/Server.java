@@ -438,6 +438,7 @@ public class Server {
                     .add("username", username)
                     .add("password", password)
                     .add("email", emailAddress)
+                    .add("endUserAgreement", String.valueOf(3))
                     .build();
             WebResponse postResponse = makePost(signupUrl, requestBody);
             Response response = postResponse.response;

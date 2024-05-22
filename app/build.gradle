@@ -115,7 +115,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:3.2.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.8.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.6.0'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     // Optional -- Hamcrest library
@@ -126,7 +126,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestImplementation 'tools.fastlane:screengrab:2.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
     // Optional -- UI testing with UI Automator
     //  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     testImplementation 'junit:junit:4.13.2'

@@ -532,6 +532,11 @@ public class Prefs {
         setDouble(LENGTH_OF_TWILIGHT_KEY, LENGTH_OF_TWILIGHT_SECONDS);
     }
 
+    public void setHasRootAccess(boolean hasRootAccess) {
+        // Store the value in shared preferences or any other suitable storage
+        setBoolean(HAS_ROOT_ACCESS_KEY, hasRootAccess);
+    }
+
     public boolean getHasRootAccess() {
         return CommonUtils.isRooted();
     }
@@ -539,7 +544,6 @@ public class Prefs {
     public boolean getUseShortRecordings() {
         return getBoolean(USE_SHORT_RECORDINGS_KEY);
     }
-
     public void setUseShortRecordings(boolean useShortRecordings) {
         setBoolean(USE_SHORT_RECORDINGS_KEY, useShortRecordings);
     }

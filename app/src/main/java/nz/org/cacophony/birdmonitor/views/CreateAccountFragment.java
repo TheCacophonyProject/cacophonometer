@@ -3,12 +3,15 @@ package nz.org.cacophony.birdmonitor.views;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,6 +44,10 @@ public class CreateAccountFragment extends Fragment {
     private TextInputEditText etPassword2;
     private Button btnSignUp;
     private TextView tvMessages;
+    private CheckBox cbEndUserAgreement;
+    private TextView tvEndUserAgreement;
+    private TextView tvPrivacyPolicy;
+
     private final BroadcastReceiver messageHandler = MessageHelper.createReceiver(this::onMessage);
 
     @Override
@@ -60,6 +67,15 @@ public class CreateAccountFragment extends Fragment {
         btnSignUp = view.findViewById(R.id.btnSignUp);
         //  btnForgetUser = (Button) view.findViewById(R.id.btnSignOutUser);
         tvMessages = view.findViewById(R.id.tvMessagesCreateAccount);
+        cbEndUserAgreement = view.findViewById(R.id.cbEndUserAgreement);
+        tvEndUserAgreement = view.findViewById(R.id.tvEndUserAgreement);
+        tvPrivacyPolicy = view.findViewById(R.id.tvPrivacyPolicy);
+
+        tvPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
+        tvPrivacyPolicy.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://cacophony.org.nz/app-privacy"));
+            startActivity(browserIntent);
+        });
 
         setUserVisibleHint(false);
 
@@ -113,6 +129,11 @@ public class CreateAccountFragment extends Fragment {
 
         if (!Util.isNetworkConnected(getActivity().getApplicationContext())) {
             ((SetupWizardActivity) getActivity()).displayOKDialogMessage("Oops", "The phone is not currently connected to the internet - please fix and try again\"");
+            return;
+        }
+
+        if (!cbEndUserAgreement.isChecked()) {
+           ((SetupWizardActivity) getActivity()).displayOKDialogMessage("Terms & Conditions", "You must accept the end user agreement terms to create an account.");
             return;
         }
 
