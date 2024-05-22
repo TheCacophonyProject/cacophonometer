@@ -636,7 +636,7 @@ public class Util {
         Intent intent = new Intent(context, MainActivity.class);
         int mPendingIntentId = 1;
         PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, mPendingIntent);
     }
@@ -651,15 +651,9 @@ public class Util {
             return;
         }
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) { // Jelly bean is 4.1
-
-            // API 17 onwards.
-            // Must be a rooted device
-
-            if (!prefs.getHasRootAccess()) {
-                Log.e(TAG, "Do NOT have required ROOT access");
-                return;
-            }
+        if (!prefs.getHasRootAccess()) {
+            Log.e(TAG, "Do NOT have required ROOT access");
+            return;
         }
 
         if (UpdateUtil.isDownloading(context)) {
@@ -673,24 +667,12 @@ public class Util {
         }
         new Thread(() -> {
             try {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) { // Jelly bean is 4.1
-
                     // Set Airplane / Flight mode using su commands.
                     String command = COMMAND_FLIGHT_MODE_1 + " " + "1";
                     executeCommandTim(context, command);
                     command = COMMAND_FLIGHT_MODE_2 + " " + "true";
                     executeCommandTim(context, command);
                     // rootedIdlingResource.decrement();
-
-                } else {
-
-                    // noinspection deprecation
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1);
-                    Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-                    intent.putExtra("state", true);
-                    context.sendBroadcast(intent);
-                }
-
             } catch (Exception e) {
                 Log.e(TAG, "Error disabling flight mode");
             }
@@ -796,7 +778,7 @@ public class Util {
                 directory = listEnvironmentVariableStoreSDCardRootDirectory.get(i);
 
             directory = canCreateFile(directory);
-            if (directory != null && directory.length() != 0) {
+            if (directory != null && !directory.isEmpty()) {
                 if (i == size - 1) {
                     if (directory.contains(FLAG)) {
                         return directory;
@@ -867,7 +849,13 @@ public class Util {
         // Marshmallow will go into Doze mode, so use setExactAndAllowWhileIdle to allow
         // wakeup
         // https://developer.android.com/reference/android/app/AlarmManager#setExactAndAllowWhileIdle(int,%20long,%20android.app.PendingIntent)
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+            if (alarmManager.canScheduleExactAlarms()) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent);
+            }
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent);
+        }
     }
 
     public static void createFailSafeAlarm(Context context) { // Each alarm creates the next one, need to have this fail
@@ -885,7 +873,7 @@ public class Util {
             Log.e(TAG, ex.getLocalizedMessage(), ex);
         }
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         if (alarmManager == null) {
@@ -1447,7 +1435,7 @@ public class Util {
             recordTimeSeconds = 60 * 15;
         } else if (typeOfRecording.equalsIgnoreCase(Prefs.REPEATING_ALARM) && prefs.getUseSunAlarms()
                 && !offsetType.equals(Prefs.NORMAL_URI)) {
-            recordTimeSeconds = prefs.getRecLength() * 60;
+            recordTimeSeconds = prefs.getRecLength() * 60L;
         }
 
         if (prefs.getUseShortRecordings()) { // for testing
@@ -1546,7 +1534,7 @@ public class Util {
     public static void changeAlarmType(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = getRepeatingAlarmIntent(context, Prefs.NOON_OFFSET);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
         if (pendingIntent != null) {
             pendingIntent.cancel();
             alarmManager.cancel(pendingIntent);
