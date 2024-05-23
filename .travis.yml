@@ -30,7 +30,7 @@ before_install:
   # Install Ruby 2.6.0
   - rvm install 2.6.0
   - rvm use 2.6.0 --default
-  - gem install bundler
+  - gem install bundler -v 2.4.22
   - bundle install
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=$ANDROID_HOME >/dev/null
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "tools" --sdk_root=$ANDROID_HOME >/dev/null
