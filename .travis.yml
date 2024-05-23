@@ -5,7 +5,7 @@ env:
     - ANDROID_HOME=/usr/local/android-sdk
     - TOOLS=${ANDROID_HOME}/tools
     - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
-    - API=32
+    - API=34
     - ABI=x86
     - AUDIO=-no-audio
 
@@ -34,11 +34,12 @@ before_install:
   # Install Ruby 2.6.0
   - rvm install 2.6.0 
   - rvm use 2.6.0 --default
+  - gem update --system
   - gem install bundler -v 2.4.22
   - bundle install
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=$ANDROID_HOME >/dev/null
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "tools" --sdk_root=$ANDROID_HOME >/dev/null
-  - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "build-tools;32.0.0" --sdk_root=$ANDROID_HOME >/dev/null
+  - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "build-tools;34.0.0" --sdk_root=$ANDROID_HOME >/dev/null
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;android-$API" --sdk_root=$ANDROID_HOME >/dev/null
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --channel=4 "emulator" --sdk_root=$ANDROID_HOME
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "extras;android;m2repository" --sdk_root=$ANDROID_HOME >/dev/null
