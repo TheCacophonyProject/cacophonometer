@@ -27,14 +27,7 @@ before_install:
   - echo 'count=0' > /home/travis/.android/repositories.cfg
   - wget "https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip" -O commandlinetools.zip
   - unzip commandlinetools.zip -d $ANDROID_HOME/
-  # Install RVM
-  - gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-  - \curl -sSL https://get.rvm.io | bash -s stable
-  - source ~/.rvm/scripts/rvm
   # Install Ruby 2.6.0
-  - rvm install 2.6.0 
-  - rvm use 2.6.0 --default
-  - gem update --system --conservative || (gem i "rubygems-update:~>2.7" --no-document && update_rubygems)
   - gem install bundler -v 2.4.22
   - bundle install
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=$ANDROID_HOME >/dev/null
