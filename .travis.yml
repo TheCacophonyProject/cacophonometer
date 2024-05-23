@@ -29,6 +29,7 @@ before_install:
   - unzip commandlinetools.zip -d $ANDROID_HOME/
   # Install Ruby 2.6.0
   - rvm install 2.6.0
+  - rvm use 2.6.0 --default
   - gem install bundler
   - bundle install
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=$ANDROID_HOME >/dev/null
