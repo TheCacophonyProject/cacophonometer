@@ -49,6 +49,7 @@ before_deploy:
   - openssl aes-256-cbc -K $encrypted_07c92ad84bea_key -iv $encrypted_07c92ad84bea_iv -in signing.tar.enc -out signing.tar -d
   - tar xvf signing.tar
   - "./gradlew clean assembleRelease"
+  - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install multipart-post -v 2.3.0
 
 deploy:
   provider: releases
