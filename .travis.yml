@@ -28,7 +28,8 @@ before_install:
   - wget "https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip" -O commandlinetools.zip
   - unzip commandlinetools.zip -d $ANDROID_HOME/
   # Install Ruby 2.6.0
-  - gem install bundler -v 2.4.22
+  - rvm install 2.6.0
+  - gem install bundler
   - bundle install
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=$ANDROID_HOME >/dev/null
   - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "tools" --sdk_root=$ANDROID_HOME >/dev/null
