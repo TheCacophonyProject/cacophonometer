@@ -10,7 +10,7 @@ env:
     - AUDIO=-no-audio
 
 language: android
-dist: focal
+dist: trusty
 jdk:
   - openjdk17
 
