@@ -54,7 +54,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: U21XKaO+J4JoPiOgdNLyxTFCnM635lMO4rRlt3rPT/AJ5AA8Uev+g2mu3nyXhl3AEOe8KkJrdAFCgJG66cV0UT+fyNkhm/K/ABpeMcV0ZBPBh/L/liM2Icky/cCbYsrll444CBZBEe4dr0qXP/MYpB3NduaXn8x3pgqg2WP6EimO/ei/nzwBU9vaIjJOdk5vmCwKF5duNVtDrG5P1DqF2ic/rT5NCK15LjnSW2kGNynK1DuS1lWK6IsuPtUbtUPVBbgPmclU9C48SjTp1pDyNSWkONxT/SOmwHgiSzfWfaWUAvQEDLyhzQAVRXb/Y65dJCeXjMwYJeoTgF+r9ptqXR+a9BxEhAcXloKtfNyxOFFtqII0VaJWrfqdYGu8XJxjsxOvvnIBppzm556A42TEeWaXVJAidCPm7BAk+zjEh+9LhTv9pgzmpYde7cH8JKiTOzNksZ1YJhZFQe68KNh8rVcPYjn7LGtNHtQMMhZG+oxXpUWQRUr/pg4UHHH50clWzYeR7Oe5XYlyl0TFuaz9h8m5GJgrlLdSw8hKRK6Kx13Vq7U0pUMc+Q4EXVGxv7gkezm/dDxXWe9fAn4KcOTxP8verT9dXHdPOZgKsyGBYNThpawjV/tWQ53Zvepzq2IgA70mN672MKhfrmAocwK1uMXCfWC9+GIDOEMJVZbI8Gw=
+    secure: $GITHUB_TOKEN
   file_glob: true
   file: app/build/outputs/apk/release/*.apk
   skip_cleanup: true
