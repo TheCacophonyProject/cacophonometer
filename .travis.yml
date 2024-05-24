@@ -53,8 +53,7 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key:
-    secure: $encrypted_620d1db238ff_key
+  api_key: $GITHUB_TOKEN
   file_glob: true
   file: app/build/outputs/apk/release/*.apk
   skip_cleanup: true
